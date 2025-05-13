@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>路径规划</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        label { display: block; margin-top: 10px; }
+        input[type="text"] { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        button { padding: 10px 15px; margin-top: 20px; cursor: pointer; }
+        #waypoints-container input { margin-bottom: 5px; }
+        #results { margin-top: 20px; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>智能路径规划</h1>
+        <label for="origin">起点:</label>
+        <input type="text" id="origin" value="北京大学">
+
+        <label for="destination">终点:</label>
+        <input type="text" id="destination" value="清华大学">
+
+        <label>途径点 (可选):</label>
+        <div id="waypoints-container">
+            <input type="text" class="waypoint" placeholder="途径点1 (例如: 颐和园)">
+        </div>
+        <button type="button" onclick="addWaypointField()">+ 添加途径点</button>
+
+        <button onclick="planRoute()">规划路径</button>
+
+        <div id="results">
+            <h2>规划结果:</h2>
+            <p><strong>LLM 总结:</strong></p>
+            <pre id="llm-summary">等待规划...</pre>
+            <p><strong>高德原始数据:</strong></p>
+            <pre id="amap-data">等待规划...</pre>
+        </div>
+    </div>
+
+    <script>
+        function addWaypointField() {
+            const container = document.getElementById('waypoints-container');
+            const newIndex = container.getElementsByClassName('waypoint').length + 1;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'waypoint';
+            input.placeholder = `途径点${newIndex}`;
+            container.appendChild(input);
+        }
+
+        async function planRoute() {
+            const origin = document.getElementById('origin').value;
+            const destination = document.getElementById('destination').value;
+            const waypointElements = document.getElementsByClassName('waypoint');
+            const waypoints = [];
+            for (let i = 0; i < waypointElements.length; i++) {
+                if (waypointElements[i].value.trim() !== '') {
+                    waypoints.push(waypointElements[i].value.trim());
+                }
+            }
+
+            document.getElementById('llm-summary').textContent = '规划中...';
+            document.getElementById('amap-data').textContent = '规划中...';
+
+            try {
+                const response = await fetch('http://localhost:3000/planning/route', { // 确保后端服务地址正确
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ origin, destination, waypoints }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                document.getElementById('llm-summary').textContent = data.llmSummary || '无LLM总结';
+                document.getElementById('amap-data').textContent = JSON.stringify(data.amapRoute, null, 2);
+
+            } catch (error) {
+                console.error('Error planning route:', error);
+                document.getElementById('llm-summary').textContent = `错误: ${error.message}`;
+                document.getElementById('amap-data').textContent = '获取失败';
+            }
+        }
+    </script>
+</body>
+</html>
