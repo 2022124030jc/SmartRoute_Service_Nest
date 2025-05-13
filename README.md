@@ -1,4 +1,4 @@
-# SmartRoute Service
+# SmartRoute 智能路径规划服务
 
 一个基于 NestJS 的智能路径规划服务，集成了：
 - NestJS 后端框架
@@ -11,87 +11,93 @@
 - 智能路线优化
 - 自然语言处理和总结
 - RESTful API 设计
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## 项目说明
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+本项目基于 [NestJS](https://github.com/nestjs/nest) 框架开发，使用 TypeScript 语言。
 
-## Project setup
+## 项目安装
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
+## 项目运行
 
 ```bash
-# development
+# 开发环境
 $ npm run start
 
-# watch mode
+# 开发环境（监听模式）
 $ npm run start:dev
 
-# production mode
+# 生产环境
 $ npm run start:prod
 ```
 
-## Run tests
+## 测试
 
 ```bash
-# unit tests
+# 单元测试
 $ npm run test
 
-# e2e tests
+# 端到端测试
 $ npm run test:e2e
 
-# test coverage
+# 测试覆盖率
 $ npm run test:cov
 ```
 
-## Deployment
+## 部署说明
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+当您准备将应用部署到生产环境时，请参考以下步骤：
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+1. 确保所有环境变量正确配置
+2. 建议使用 PM2 或 Docker 进行部署
+3. 详细信息请查看 [部署文档](https://docs.nestjs.com/deployment)
 
-```bash
-$ npm install -g mau
-$ mau deploy
+## 技术栈
+
+本项目使用了以下主要技术：
+
+- NestJS - Node.js 后端框架
+- TypeScript - 编程语言
+- 高德地图 API - 路径规划服务
+- OpenAI API - 自然语言处理
+
+## 目录结构
+
+```
+src/
+├── common/          # 公共模块（DTO、工具类等）
+├── config/          # 配置文件
+├── llm/             # LLM 服务模块
+├── map/             # 地图服务模块
+├── planning/        # 路径规划模块
+└── main.ts         # 应用入口文件
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## API 文档
 
-## Resources
+主要接口：
+- POST `/planning/route` - 路径规划接口
+  - 支持多点路径规划
+  - 返回详细的路线信息和 LLM 优化建议
 
-Check out a few resources that may come in handy when working with NestJS:
+## 环境变量配置
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+请在项目根目录创建 `.env` 文件，配置以下环境变量：
 
-## Support
+```bash
+PORT=3000
+AMAP_API_KEY=您的高德地图API密钥
+LLM_API_KEY=您的LLM服务API密钥
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 开发团队
 
-## Stay in touch
+- 开发者 - jc
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 版权信息
 
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-=======
-# SmartRoute_Service_Nest
-a demo：结合了 NestJS (后端框架)、高德地图 MCP (路径规划服务) 和 LLM (大语言模型，用于增强用户体验或处理自然语言)
-
-test
->>>>>>> de6e7465b9db2ad1842c08021f515f66627ff69f
+本项目采用 MIT 许可证，详情请参见 [LICENSE](LICENSE) 文件。
