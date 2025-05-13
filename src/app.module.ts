@@ -7,7 +7,7 @@ import { RouteResponseDto } from './common/dtos/route-response.dto';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MapModule } from './map/map.module';
-// import { PlanningModule } from './planning/planning.module';
+import { PlanningModule } from './planning/planning.module';
 import { LlmModule } from './llm/llm.module';
 
 @Module({
@@ -18,7 +18,7 @@ import { LlmModule } from './llm/llm.module';
     }),
     HttpModule,
     MapModule,
-    // PlanningModule,
+    PlanningModule,
     LlmModule,
   ],
   controllers: [AppController],

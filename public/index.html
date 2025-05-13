@@ -204,13 +204,12 @@
             }
 
             document.getElementById('llm-summary').textContent = '⏳ 规划路线中，请稍候...';
-            document.getElementById('amap-data').textContent = '⏳ 获取数据中...';
-
-            try {
-                const response = await fetch('http://localhost:3000/planning/route', {
+            document.getElementById('amap-data').textContent = '⏳ 获取数据中...';            try {
+                const response = await fetch('/planning/route', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({ origin, destination, waypoints }),
                 });
