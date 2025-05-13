@@ -63,18 +63,43 @@ $ npm run test:cov
 - NestJS - Node.js 后端框架
 - TypeScript - 编程语言
 - 高德地图 API - 路径规划服务
-- OpenAI API - 自然语言处理
+- OpenRouter API（Deepseek模型）- 自然语言处理
 
 ## 目录结构
 
 ```
-src/
-├── common/          # 公共模块（DTO、工具类等）
-├── config/          # 配置文件
-├── llm/             # LLM 服务模块
-├── map/             # 地图服务模块
-├── planning/        # 路径规划模块
-└── main.ts         # 应用入口文件
+.
+├── public/                 # 静态文件目录
+│   └── index.html         # 前端页面
+├── src/                   # 源代码目录
+│   ├── common/           # 公共模块
+│   │   └── dtos/        # 数据传输对象
+│   │       ├── route-request.dto.ts   # 路由请求DTO
+│   │       └── route-response.dto.ts  # 路由响应DTO
+│   ├── config/          # 配置文件
+│   │   └── app.config.ts # 应用配置
+│   ├── llm/            # LLM服务模块
+│   │   ├── llm.module.ts  # LLM模块定义
+│   │   └── llm.service.ts # LLM服务实现
+│   ├── map/            # 地图服务模块
+│   │   ├── map.module.ts  # 地图模块定义
+│   │   └── map.service.ts # 地图服务实现
+│   ├── planning/       # 路径规划模块
+│   │   ├── planning.controller.ts # 路径规划控制器
+│   │   ├── planning.module.ts     # 规划模块定义
+│   │   └── planning.service.ts    # 规划服务实现
+│   ├── app.controller.ts  # 应用控制器
+│   ├── app.module.ts      # 主模块
+│   ├── app.service.ts     # 应用服务
+│   └── main.ts           # 应用入口文件
+├── test/                  # 测试目录
+│   ├── app.e2e-spec.ts    # E2E测试
+│   └── jest-e2e.json      # 测试配置
+├── .env                   # 环境变量配置
+├── nest-cli.json         # Nest CLI配置
+├── package.json          # 项目依赖配置
+├── tsconfig.json         # TypeScript配置
+└── README.md            # 项目说明文档
 ```
 
 ## API 文档
