@@ -2,34 +2,170 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>路径规划</title>
-    <style>
-        body { font-family: sans-serif; margin: 20px; }
-        .container { max-width: 600px; margin: auto; }
-        label { display: block; margin-top: 10px; }
-        input[type="text"] { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-        button { padding: 10px 15px; margin-top: 20px; cursor: pointer; }
-        #waypoints-container input { margin-bottom: 5px; }
-        #results { margin-top: 20px; padding: 15px; border: 1px solid #ccc; background-color: #f9f9f9; }
-        pre { white-space: pre-wrap; word-wrap: break-word; }
+    <title>路径规划</title>    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --border-radius: 8px;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: var(--text-color);
+        }
+
+        .container { 
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        label { 
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        input[type="text"] { 
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            transition: border-color 0.3s ease;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        button { 
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            width: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        #waypoints-container {
+            margin-top: 10px;
+        }
+
+        #waypoints-container input {
+            margin-bottom: 10px;
+        }
+
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            background-color: var(--secondary-color);
+            box-shadow: var(--shadow);
+        }
+
+        #results h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #e0e0e0;
+            margin-top: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.3s ease-out;
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>智能路径规划</h1>
-        <label for="origin">起点:</label>
-        <input type="text" id="origin" value="北京大学">
-
-        <label for="destination">终点:</label>
-        <input type="text" id="destination" value="清华大学">
-
-        <label>途径点 (可选):</label>
-        <div id="waypoints-container">
-            <input type="text" class="waypoint" placeholder="途径点1 (例如: 颐和园)">
+<body>    <div class="container animate-in">
+        <h1>🗺️ 智能路径规划</h1>
+        
+        <div class="form-group">
+            <label for="origin">📍 起点:</label>
+            <input type="text" id="origin" value="北京大学" placeholder="请输入起点位置">
         </div>
-        <button type="button" onclick="addWaypointField()">+ 添加途径点</button>
 
-        <button onclick="planRoute()">规划路径</button>
+        <div class="form-group">
+            <label for="destination">🎯 终点:</label>
+            <input type="text" id="destination" value="清华大学" placeholder="请输入终点位置">
+        </div>
+
+        <div class="form-group">
+            <label>🚩 途径点 (可选):</label>
+            <div id="waypoints-container">
+                <input type="text" class="waypoint" placeholder="途径点1 (例如: 颐和园)">
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button type="button" onclick="addWaypointField()" class="secondary-button">
+                ➕ 添加途径点
+            </button>
+            <button onclick="planRoute()" class="primary-button">
+                🚗 开始规划
+            </button>
+        </div>
 
         <div id="results">
             <h2>规划结果:</h2>
@@ -52,21 +188,26 @@
         }
 
         async function planRoute() {
+            const planButton = document.querySelector('button.primary-button');
+            planButton.disabled = true;
+            planButton.innerHTML = '⏳ 规划中...';
+
             const origin = document.getElementById('origin').value;
             const destination = document.getElementById('destination').value;
             const waypointElements = document.getElementsByClassName('waypoint');
             const waypoints = [];
+            
             for (let i = 0; i < waypointElements.length; i++) {
                 if (waypointElements[i].value.trim() !== '') {
                     waypoints.push(waypointElements[i].value.trim());
                 }
             }
 
-            document.getElementById('llm-summary').textContent = '规划中...';
-            document.getElementById('amap-data').textContent = '规划中...';
+            document.getElementById('llm-summary').textContent = '⏳ 规划路线中，请稍候...';
+            document.getElementById('amap-data').textContent = '⏳ 获取数据中...';
 
             try {
-                const response = await fetch('http://localhost:3000/planning/route', { // 确保后端服务地址正确
+                const response = await fetch('http://localhost:3000/planning/route', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -81,12 +222,14 @@
 
                 const data = await response.json();
                 document.getElementById('llm-summary').textContent = data.llmSummary || '无LLM总结';
-                document.getElementById('amap-data').textContent = JSON.stringify(data.amapRoute, null, 2);
-
-            } catch (error) {
+                document.getElementById('amap-data').textContent = JSON.stringify(data.amapRoute, null, 2);            } catch (error) {
                 console.error('Error planning route:', error);
-                document.getElementById('llm-summary').textContent = `错误: ${error.message}`;
+                document.getElementById('llm-summary').textContent = `❌ 错误: ${error.message}`;
                 document.getElementById('amap-data').textContent = '获取失败';
+            } finally {
+                const planButton = document.querySelector('button.primary-button');
+                planButton.disabled = false;
+                planButton.innerHTML = '🚗 开始规划';
             }
         }
     </script>
